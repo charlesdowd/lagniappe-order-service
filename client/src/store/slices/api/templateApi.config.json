@@ -1,0 +1,8 @@
+{
+  "schemaFile": "./templateApi.yaml",
+  "apiFile": "./templateApi.base.ts",
+  "apiImport": "templateApi",
+  "outputFile": "./templateApi.generated.ts",
+  "exportName": "templateApi",
+  "hooks": false
+}

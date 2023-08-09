@@ -1,0 +1,573 @@
+openapi: 3.1.0
+x-stoplight:
+  id: 89kuqh6fotpoj
+info:
+  title: template
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000/api/v1'
+paths:
+  /admin/user:
+    parameters: []
+    get:
+      summary: Get User by ID
+      tags: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+              examples: {}
+        '':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+      operationId: adminGetUsers
+      description: Admin route to get all users
+  /user:
+    post:
+      summary: Create New User
+      operationId: createUser
+      responses:
+        '200':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                required:
+                  - user
+              examples: {}
+        '400':
+          description: Missing Required Information
+        '409':
+          description: Email Already Taken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+            examples:
+              Example 1:
+                value:
+                  email: user@email.com
+                  password: user_password
+        description: Post the necessary fields for the API to create a new user.
+      description: Create a new user.
+    get:
+      summary: Get All Users
+      operationId: getUser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+      description: Gets the current user who made the request
+  /auth:
+    post:
+      summary: Login
+      operationId: login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+                required:
+                  - accessToken
+      description: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+  /auth/logout:
+    post:
+      summary: ''
+      operationId: sendLogout
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '204':
+          description: No Content
+      description: Clears the refresh token that is stored in the refresh_jwt cookie
+  /auth/register:
+    post:
+      summary: ''
+      operationId: register
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      description: Register a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                company:
+                  type: string
+                phoneNumber:
+                  type: string
+              required:
+                - email
+  /auth/verify-email:
+    post:
+      summary: ''
+      operationId: verifyEmail
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+      description: Verify a users email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailToken:
+                  type: string
+  /auth/set-password:
+    post:
+      summary: ''
+      operationId: setPassword
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      description: Set password for user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                password:
+                  type: string
+              required:
+                - userId
+                - password
+  /admin/approve-account:
+    post:
+      summary: ''
+      operationId: adminApproveAccount
+      responses:
+        '201':
+          description: Created
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      description: Allow admins to approve the account of a specific user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+              required:
+                - userId
+  /auth/refresh:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-auth-refresh
+  /product:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+      operationId: getAllProducts
+      description: Get all products we offer
+  /order:
+    post:
+      summary: ''
+      operationId: createOrder
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: '#/components/schemas/Order'
+                required:
+                  - order
+      description: Create an order for a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderItems:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/OrderItem'
+                poNumber:
+                  type: string
+                  x-stoplight:
+                    id: 61owkips1vr28
+              required:
+                - orderItems
+        description: Body includes an array of orderItems and an optional poNumber
+    get:
+      summary: ''
+      operationId: getOrders
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+      description: Get all of a users orders
+  /admin/order:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+      operationId: adminGetOrders
+      description: Get all orders - admin protected route
+  /auth/reset-password:
+    post:
+      summary: ''
+      operationId: resetPassword
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+      description: 'If the resetToken is valid, we delete the users password. Returns the user from our db so we can set them in redux state.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resetToken:
+                  type: string
+  /auth/forgot-password:
+    post:
+      summary: ''
+      operationId: forgotPassword
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      description: Sends an resetToken in a url to the passed in email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+  /user/favorite:
+    post:
+      summary: ''
+      operationId: addFavorite
+      responses:
+        '200':
+          description: OK
+      description: Add product to a users favorties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product:
+                  x-stoplight:
+                    id: 8cjwxkwqdhv3h
+                  type: string
+              required:
+                - product
+        description: The body has the product ID to be added to the users favorites array
+  /user/unfavorite:
+    post:
+      summary: ''
+      operationId: removeFavorite
+      responses:
+        '200':
+          description: OK
+      description: Remove product from a users favorites array
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product:
+                  x-stoplight:
+                    id: 7y5bc2sgqiynu
+                  type: string
+        description: The body contains the product ID that is to be removed from the users favorites
+components:
+  schemas:
+    User:
+      type: object
+      x-examples:
+        Example 1:
+          _id:
+            $oid: 63abdd37dba610ee7ef68dbb
+          username: helloWorld
+          email: charlie.dowd1996@gmail.com
+          firstName: Charlie
+          password: '123'
+          createdAt:
+            $date: '2022-12-28T06:07:51.229Z'
+          updatedAt:
+            $date: '2022-12-28T06:07:51.229Z'
+          __v: 0
+      title: User
+      examples:
+        - email: user@example.com
+          password: string
+          _id: string
+          createdAt: '2019-08-24T14:15:22Z'
+          updatedAt: '2019-08-24T14:15:22Z'
+          emailVerified: true
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        _id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        emailVerified:
+          type: boolean
+        admin:
+          type: boolean
+        approved:
+          type: boolean
+        company:
+          type: string
+        phoneNumber:
+          type: string
+        favorites:
+          x-stoplight:
+            id: wvbhgym02g72l
+          type: array
+          description: Array of product ObjectIds
+          items:
+            x-stoplight:
+              id: wys9uz0ugm69h
+            type: string
+      required:
+        - email
+        - _id
+        - createdAt
+        - updatedAt
+        - emailVerified
+    Product:
+      title: Product
+      x-stoplight:
+        id: vcqf4mviae2l5
+      type: object
+      description: Products that we offer
+      properties:
+        _id:
+          type: string
+        itemId:
+          type: string
+        description:
+          type: string
+        casePack:
+          type: string
+        caseWeight:
+          type: string
+        category:
+          type: string
+          x-stoplight:
+            id: t1ol7lrhdq2ku
+          enum:
+            - SEAFOOD_CAKES
+            - SEAFOOD_BURGERS
+            - SEAFOOD_SAUSAGE
+            - SEAFOOD_SALADS
+            - SEAFOOD_STUFFING
+            - PREPARED_FILLETS
+          description: Category that this product is a part of
+      required:
+        - _id
+        - itemId
+        - description
+        - casePack
+        - caseWeight
+    Order:
+      title: Order
+      x-stoplight:
+        id: 1uhdkg67elwy7
+      type: object
+      properties:
+        _id:
+          type: string
+        customer:
+          $ref: '#/components/schemas/User'
+          description: User ID of the user who created this order
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        poNumber:
+          type: string
+          x-stoplight:
+            id: t5hza07ep7k8i
+      required:
+        - _id
+        - customer
+        - orderItems
+        - createdAt
+        - updatedAt
+    OrderItem:
+      title: OrderItem
+      x-stoplight:
+        id: mavmg1s4k2bec
+      type: object
+      properties:
+        quantity:
+          type: integer
+        product:
+          $ref: '#/components/schemas/Product'
+          description: Product
+      required:
+        - quantity
+        - product

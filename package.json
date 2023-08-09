@@ -1,0 +1,42 @@
+{
+  "name": "krabbypatty",
+  "version": "1.0.0",
+  "description": "Built off of template project",
+  "main": "index.js",
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@types/common-errors": "^1.0.2",
+    "bcrypt": "^5.1.0",
+    "common-errors": "^1.2.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^5.1.1",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^6.8.1",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.1",
+    "react-scripts": "^5.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd server && node dist/src/index.js",
+    "build": "cd client && npm install && npm run build && (cd ../server && npm install && tsc)",
+    "postinstall": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lagniappe-Foods/KrustyKrab.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lagniappe-Foods/KrustyKrab/issues"
+  },
+  "homepage": "https://github.com/Lagniappe-Foods/KrustyKrab#readme"
+}
